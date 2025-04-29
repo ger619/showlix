@@ -20,7 +20,9 @@
 
   <body>
     <main class="mx-auto  flex">
-      <%= render 'layouts/sidebar' %>
+      <% if current_user && user_signed_in?  %>
+        <%= render 'layouts/sidebar' %>
+      <% end %>
       <%= yield %>
     </main>
   </body>

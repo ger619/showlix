@@ -10,5 +10,4 @@ class ApplicationController < ActionController::Base
     end
     devise_parameter_sanitizer.permit(:invite, keys: %i[email role])
   end
-
 end

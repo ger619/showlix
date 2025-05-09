@@ -1,0 +1,17 @@
+<div class>
+  <%= form_with  model: @home, url: home_index_url, method: :post, data: { turbo: false }, local: true do |f| %>
+    <div class="z-0 w-3/4 mb-6 group">
+      <%= f.label :name, ('Name of The Document*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+      <%= f.text_field :name, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+    </div>
+    <div class="z-0 w-3/4 mb-6 group">
+      <%= f.label :date, ('Name of The Document*'), class: "capitalize block mb-1 text-sm font-medium text-gray-900 dark:text-white"  %><br />
+      <%= f.date_field :date, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+    </div>
+    <div class="z-0 w-3/4 mb-6 group">
+      <%= f.label :description, ('Add CSV/XLSX*'), class: "capitalize block mb-1 text-sm font-medium"  %><br />
+      <%= f.file_field :document, class: "border border-gray-300 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500", placeholder: '', required: true %>
+    </div>
+    <%= f.submit  class: 'mb-4 h-12 bg-[#3F8CFF] hover:bg-[#3A81EB] p-3 rounded font-bold rounded-lg text-slate-100'  %>
+  <% end %>
+</div>

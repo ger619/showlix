@@ -9,9 +9,8 @@ class Home < ApplicationRecord
   def acceptable_document
     return unless document.attached?
 
-    unless document.content_type.in?(%w[application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet])
-      errors.add(:document, 'must be an Excel file (.xls or .xlsx)')
-    end
-  end
+    return if document.content_type.in?(%w[application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet])
 
+    errors.add(:document, 'must be an Excel file (.xls or .xlsx)')
   end
+end

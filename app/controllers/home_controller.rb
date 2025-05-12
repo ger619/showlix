@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_home, only: %i[show edit update]
 
   def index
     @home = Home.all
@@ -22,7 +23,28 @@ class HomeController < ApplicationController
     end
   end
 
+  def show; end
+
+  def edit; end
+
+  def update
+    @home.user_id = current_user.id
+    respond_to do |format|
+      if @home.update(home_params)
+        format.html { redirect_to root_path, notice: 'Home was successfully updated.' }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
+
+  def set_home
+    @home = Home.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Home not found.'
+  end
 
   def home_params
     params.require(:home).permit(:name, :date, :document, :user_id)

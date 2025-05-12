@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_home, only: %i[show edit update]
+  before_action :set_home, only: %i[show edit update destroy]
 
   def index
     @home = Home.all
@@ -35,6 +35,15 @@ class HomeController < ApplicationController
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def destroy
+    @home.destroy
+    respond_to do |format|
+      format.html { redirect_to root_path, notice: 'Home was successfully deleted.' }
+    rescue ActiveRecord::RecordNotFound
+      format.html { redirect_to root_path, alert: 'Home not found.' }
     end
   end
 

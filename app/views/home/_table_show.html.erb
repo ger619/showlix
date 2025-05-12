@@ -35,7 +35,8 @@
         <%= link_to 'EDIT', edit_home_path(home), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-gray-900 ' %>
       </td>
       <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-        <%= link_to 'DELETE', home_path(home), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-gray-900 ' %>
+        <%= link_to 'delete', home, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
+
       </td>
     </tr>
     <% end %>

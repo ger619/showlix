@@ -24,7 +24,7 @@ class HomeController < ApplicationController
   end
 
   def show
-    @file = Home.find(params[:id])  # Assuming you're using Active Storage and the model is Home
+    @file = Home.find(params[:id]) # Assuming you're using Active Storage and the model is Home
     return unless @file.document.attached?
 
     # Read the spreadsheet
@@ -44,7 +44,7 @@ class HomeController < ApplicationController
 
     # Process each row (starting from row 2 to skip header)
     (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
+      row = [header, spreadsheet.row(i)].transpose.to_h
 
       # Assuming your Excel/CSV has a column named 'type' or 'transaction_type'
       # and 'amount' column
@@ -62,8 +62,7 @@ class HomeController < ApplicationController
     @total_deposits = @deposits.sum { |d| d['amount'].to_f }
     @total_credits = @credits.sum { |c| c['amount'].to_f }
     @total_returns = @returns.sum { |r| r['amount'].to_f }
-
-  rescue => e
+  rescue StandardError => e
     flash.now[:alert] = "Error processing file: #{e.message}"
     @deposits = []
     @credits = []

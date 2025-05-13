@@ -36,10 +36,10 @@
         <tbody class="divide-y divide-gray-200">
         <% @deposits.each do |deposit| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= deposit.created_at.strftime("%B %d, %Y") %></td>
-            <td class="px-6 py-4"><%= deposit.description %></td>
-            <td class="px-6 py-4 text-green-600 font-semibold"><%= number_to_currency(deposit.amount) %></td>
-            <td class="px-6 py-4"><%= deposit.status %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(deposit['created_at']).strftime("%B %d, %Y") if deposit['created_at'] %></td>
+            <td class="px-6 py-4"><%= deposit['description'] %></td>
+            <td class="px-6 py-4 text-green-600 font-semibold"><%= number_to_currency(deposit['amount']) %></td>
+            <td class="px-6 py-4"><%= deposit['status'] %></td>
           </tr>
         <% end %>
         </tbody>
@@ -63,10 +63,10 @@
         <tbody class="divide-y divide-gray-200">
         <% @credits.each do |credit| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= credit.created_at.strftime("%B %d, %Y") %></td>
-            <td class="px-6 py-4"><%= credit.description %></td>
-            <td class="px-6 py-4 text-blue-600 font-semibold"><%= number_to_currency(credit.amount) %></td>
-            <td class="px-6 py-4"><%= credit.status %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(credit['created_at']).strftime("%B %d, %Y") if credit['created_at'] %></td>
+            <td class="px-6 py-4"><%= credit['description'] %></td>
+            <td class="px-6 py-4 text-blue-600 font-semibold"><%= number_to_currency(credit['amount']) %></td>
+            <td class="px-6 py-4"><%= credit['status'] %></td>
           </tr>
         <% end %>
         </tbody>
@@ -90,10 +90,11 @@
         <tbody class="divide-y divide-gray-200">
         <% @returns.each do |return_item| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= return_item.created_at.strftime("%B %d, %Y") %></td>
-            <td class="px-6 py-4"><%= return_item.description %></td>
-            <td class="px-6 py-4 text-yellow-600 font-semibold"><%= number_to_currency(return_item.amount) %></td>
-            <td class="px-6 py-4"><%= return_item.status %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(return_item['created_at']).strftime("%B %d, %Y") if return_item['created_at'] %></td>
+            <td class="px-6 py-4"><%= return_item['description'] %></td>
+            <td class="px-6 py-4 text-yellow-600 font-semibold"><%= number_to_currency(return_item['amount']) %></td>
+            <td class="px-6 py-4"><%= return_item['status'] %></td>
+
           </tr>
         <% end %>
         </tbody>

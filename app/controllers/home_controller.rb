@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
   before_action :set_home, only: %i[show edit update destroy]
+  require 'tempfile'
 
   def index
     @home = Home.all
@@ -24,44 +25,42 @@ class HomeController < ApplicationController
   end
 
   def show
-    @file = Home.find(params[:id]) # Assuming you're using Active Storage and the model is Home
+    @file = Home.find(params[:id])
     return unless @file.document.attached?
 
-    # Read the spreadsheet
-    spreadsheet = case @file.document.filename.extension
-                  when 'csv' then Roo::CSV.new(@file.document.download)
-                  when 'xls' then Roo::Excel.new(@file.document.download)
-                  when 'xlsx' then Roo::Excelx.new(@file.document.download)
-                  end
+    Tempfile.create(['uploaded_file', ".#{@file.document.filename.extension}"]) do |tempfile|
+      tempfile.write(@file.document.download)
+      tempfile.rewind
 
-    # Skip header row if it exists
-    header = spreadsheet.row(1)
+      spreadsheet = case @file.document.filename.extension
+                    when 'csv' then Roo::CSV.new(tempfile.path)
+                    when 'xls' then Roo::Excel.new(tempfile.path)
+                    when 'xlsx' then Roo::Excelx.new(tempfile.path)
+                    end
 
-    # Initialize arrays to store categorized data
-    @deposits = []
-    @credits = []
-    @returns = []
+      header = spreadsheet.row(1)
+      @deposits = []
+      @credits = []
+      @returns = []
 
-    # Process each row (starting from row 2 to skip header)
-    (2..spreadsheet.last_row).each do |i|
-      row = [header, spreadsheet.row(i)].transpose.to_h
+      (2..spreadsheet.last_row).each do |i|
+        row = [header, spreadsheet.row(i)].transpose.to_h
+        next unless row['type'] && row['amount']
 
-      # Assuming your Excel/CSV has a column named 'type' or 'transaction_type'
-      # and 'amount' column
-      case row['type']&.downcase
-      when 'deposit'
-        @deposits << row
-      when 'credit'
-        @credits << row
-      when 'return'
-        @returns << row
+        case row['type']&.strip&.downcase
+        when 'deposit'
+          @deposits << row
+        when 'credit'
+          @credits << row
+        when 'return'
+          @returns << row
+        end
       end
-    end
 
-    # Calculate totals
-    @total_deposits = @deposits.sum { |d| d['amount'].to_f }
-    @total_credits = @credits.sum { |c| c['amount'].to_f }
-    @total_returns = @returns.sum { |r| r['amount'].to_f }
+      @total_deposits = @deposits.sum { |d| d['amount'].to_f }
+      @total_credits = @credits.sum { |c| c['amount'].to_f }
+      @total_returns = @returns.sum { |r| r['amount'].to_f }
+    end
   rescue StandardError => e
     flash.now[:alert] = "Error processing file: #{e.message}"
     @deposits = []

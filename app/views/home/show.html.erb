@@ -4,19 +4,19 @@
     <div class="bg-green-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-green-800">Total Deposits</h3>
       <p class="text-2xl font-bold text-green-600"><%= number_to_currency(@total_deposits) %></p>
-      <p class="text-sm text-green-700">Total transactions: <%= @deposits.count %></p>
+      <p class="text-sm text-green-700">Total transactions: <%#= @deposits.count %></p>
     </div>
 
     <div class="bg-blue-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-blue-800">Total Credits</h3>
       <p class="text-2xl font-bold text-blue-600"><%= number_to_currency(@total_credits) %></p>
-      <p class="text-sm text-blue-700">Total transactions: <%= @credits.count %></p>
+      <p class="text-sm text-blue-700">Total transactions: <%#= @credits.count %></p>
     </div>
 
     <div class="bg-yellow-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-yellow-800">Total Returns</h3>
       <p class="text-2xl font-bold text-yellow-600"><%= number_to_currency(@total_returns) %></p>
-      <p class="text-sm text-yellow-700">Total transactions: <%= @returns.count %></p>
+      <p class="text-sm text-yellow-700">Total transactions: <%#= @returns.count %></p>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
         <% @deposits.each do |deposit| %>
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= (deposit['date'].is_a?(Date) ? deposit['date'] : Date.parse(deposit['date'])).strftime("%B %d, %Y") %>
+              <%= deposit['date'].present? ? (deposit['date'].is_a?(Date) ? deposit['date'] : Date.parse(deposit['date'])).strftime("%B %d, %Y") : 'N/A' %>
             </td>
             <td class="px-6 py-4"><%= deposit['description'] %></td>
 
@@ -67,7 +67,7 @@
         <% @credits.each do |credit| %>
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= (credit['date'].is_a?(Date) ? credit['date'] : Date.parse(credit['date'])).strftime("%B %d, %Y") %>
+              <%= credit['date'].present? ? (credit['date'].is_a?(Date) ? credit['date'] : Date.parse(credit['date'])).strftime("%B %d, %Y") : 'N/A' %>
             </td>
             <td class="px-6 py-4"><%= credit['description'] %></td>
             <td class="px-6 py-4 text-blue-600 font-semibold"><%= number_to_currency(credit['amount']) %></td>
@@ -96,7 +96,7 @@
         <% @returns.each do |return_item| %>
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">
-              <%= (return_item['date'].is_a?(Date) ? return_item['date'] : Date.parse(return_item['date'])).strftime("%B %d, %Y") %>
+              <%= return_item['date'].present? ? (return_item['date'].is_a?(Date) ? return_item['date'] : Date.parse(return_item['date'])).strftime("%B %d, %Y") : 'N/A' %>
             </td>
             <td class="px-6 py-4"><%= return_item['description'] %></td>
             <td class="px-6 py-4 text-yellow-600 font-semibold"><%= number_to_currency(return_item['amount']) %></td>

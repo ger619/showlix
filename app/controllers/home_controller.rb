@@ -4,7 +4,56 @@ class HomeController < ApplicationController
   require 'tempfile'
 
   def index
-    @home = Home.all.order('created_at DESC')
+    @homes = Home.all.order('created_at DESC')
+    @totals_deposits = {}
+    @totals_credits = {}
+    @totals_returns = {}
+
+    @homes.each do |home|
+      next unless home.document.attached?
+
+      Tempfile.create(['uploaded_file', ".#{home.document.filename.extension}"]) do |tempfile|
+        content = home.document.download.force_encoding('UTF-8')
+        tempfile.write(content)
+        tempfile.rewind
+
+        spreadsheet = case home.document.filename.extension
+                      when 'csv' then Roo::CSV.new(tempfile.path)
+                      when 'xls' then Roo::Excel.new(tempfile.path)
+                      when 'xlsx' then Roo::Excelx.new(tempfile.path)
+                      end
+
+        header = spreadsheet.row(1)
+        deposits = []
+        credits = []
+        returns = []
+
+        (2..spreadsheet.last_row).each do |i|
+          row = [header, spreadsheet.row(i)].transpose.to_h
+          next unless row['type'] && row['amount']
+
+          case row['type']&.strip&.downcase
+          when 'deposit'
+            deposits << row
+          when 'credit'
+            credits << row
+          when 'return'
+            returns << row
+          end
+        end
+
+        @totals_deposits[home.id] = deposits.sum { |d| d['amount'].to_f }
+        @totals_credits[home.id] = credits.sum { |c| c['amount'].to_f }
+        @totals_returns[home.id] = returns.sum { |r| r['amount'].to_f }
+        @total_deposits_sum = @totals_deposits.values.sum
+        @total_credits_sum = @totals_credits.values.sum
+        @total_returns_sum = @totals_returns.values.sum
+      end
+    rescue StandardError
+      @totals_deposits[home.id] = 0
+      @totals_credits[home.id] = 0
+      @totals_returns[home.id] = 0
+    end
   end
 
   def new

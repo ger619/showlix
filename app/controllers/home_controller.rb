@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   require 'tempfile'
 
   def index
-    @home = Home.all
+    @home = Home.all.order('created_at DESC')
   end
 
   def new
@@ -17,7 +17,7 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       if @home.save
-        format.html { redirect_to root_path, notice: 'Home was successfully created.' }
+        format.html { redirect_to home_path(@home), notice: 'Home was successfully created.' }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -77,7 +77,7 @@ class HomeController < ApplicationController
     @home.user_id = current_user.id
     respond_to do |format|
       if @home.update(home_params)
-        format.html { redirect_to root_path, notice: 'Home was successfully updated.' }
+        format.html { redirect_to home_path(@home), notice: 'Home was successfully updated.' }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end

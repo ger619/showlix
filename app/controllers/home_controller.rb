@@ -29,7 +29,8 @@ class HomeController < ApplicationController
     return unless @file.document.attached?
 
     Tempfile.create(['uploaded_file', ".#{@file.document.filename.extension}"]) do |tempfile|
-      tempfile.write(@file.document.download)
+      content = @file.document.download.force_encoding('UTF-8')
+      tempfile.write(content)
       tempfile.rewind
 
       spreadsheet = case @file.document.filename.extension
@@ -61,14 +62,14 @@ class HomeController < ApplicationController
       @total_credits = @credits.sum { |c| c['amount'].to_f }
       @total_returns = @returns.sum { |r| r['amount'].to_f }
     end
-  rescue StandardError => e
-    flash.now[:alert] = "Error processing file: #{e.message}"
-    @deposits = []
-    @credits = []
-    @returns = []
-    @total_deposits = 0
-    @total_credits = 0
-    @total_returns = 0
+    # rescue StandardError => e
+    # flash.now[:alert] = "Error processing file: #{e.message}"
+    # @deposits = []
+    # @credits = []
+    # @returns = []
+    # @total_deposits = 0
+    # @total_credits = 0
+    # @total_returns = 0
   end
 
   def edit; end

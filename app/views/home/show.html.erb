@@ -4,19 +4,19 @@
     <div class="bg-green-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-green-800">Total Deposits</h3>
       <p class="text-2xl font-bold text-green-600"><%= number_to_currency(@total_deposits) %></p>
-      <p class="text-sm text-green-700">Total transactions: <%= @deposits.count %></p>
+      <p class="text-sm text-green-700">Total transactions: <%#= @deposits.count %></p>
     </div>
 
     <div class="bg-blue-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-blue-800">Total Credits</h3>
       <p class="text-2xl font-bold text-blue-600"><%= number_to_currency(@total_credits) %></p>
-      <p class="text-sm text-blue-700">Total transactions: <%= @credits.count %></p>
+      <p class="text-sm text-blue-700">Total transactions: <%#= @credits.count %></p>
     </div>
 
     <div class="bg-yellow-100 p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-yellow-800">Total Returns</h3>
       <p class="text-2xl font-bold text-yellow-600"><%= number_to_currency(@total_returns) %></p>
-      <p class="text-sm text-yellow-700">Total transactions: <%= @returns.count %></p>
+      <p class="text-sm text-yellow-700">Total transactions: <%#= @returns.count %></p>
     </div>
   </div>
 
@@ -30,16 +30,19 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
         <% @deposits.each do |deposit| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(deposit['created_at']).strftime("%B %d, %Y") if deposit['created_at'] %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= deposit['date'].present? ? (deposit['date'].is_a?(Date) ? deposit['date'] : Date.parse(deposit['date'])).strftime("%B %d, %Y") : 'N/A' %>
+            </td>
             <td class="px-6 py-4"><%= deposit['description'] %></td>
+
             <td class="px-6 py-4 text-green-600 font-semibold"><%= number_to_currency(deposit['amount']) %></td>
-            <td class="px-6 py-4"><%= deposit['status'] %></td>
+            <td class="px-6 py-4"><%= deposit['type'] %></td>
           </tr>
         <% end %>
         </tbody>
@@ -57,16 +60,18 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
         <% @credits.each do |credit| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(credit['created_at']).strftime("%B %d, %Y") if credit['created_at'] %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= credit['date'].present? ? (credit['date'].is_a?(Date) ? credit['date'] : Date.parse(credit['date'])).strftime("%B %d, %Y") : 'N/A' %>
+            </td>
             <td class="px-6 py-4"><%= credit['description'] %></td>
             <td class="px-6 py-4 text-blue-600 font-semibold"><%= number_to_currency(credit['amount']) %></td>
-            <td class="px-6 py-4"><%= credit['status'] %></td>
+            <td class="px-6 py-4"><%= credit['type'] %></td>
           </tr>
         <% end %>
         </tbody>
@@ -84,16 +89,18 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
         </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
         <% @returns.each do |return_item| %>
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap"><%= Date.parse(return_item['created_at']).strftime("%B %d, %Y") if return_item['created_at'] %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <%= return_item['date'].present? ? (return_item['date'].is_a?(Date) ? return_item['date'] : Date.parse(return_item['date'])).strftime("%B %d, %Y") : 'N/A' %>
+            </td>
             <td class="px-6 py-4"><%= return_item['description'] %></td>
             <td class="px-6 py-4 text-yellow-600 font-semibold"><%= number_to_currency(return_item['amount']) %></td>
-            <td class="px-6 py-4"><%= return_item['status'] %></td>
+            <td class="px-6 py-4"><%= return_item['type'] %></td>
 
           </tr>
         <% end %>

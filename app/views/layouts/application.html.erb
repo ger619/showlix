@@ -19,8 +19,13 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="mx-auto  flex">
+      <% if current_user && user_signed_in?  %>
+        <%= render 'layouts/sidebar' %>
+      <% end %>
       <%= yield %>
     </main>
   </body>
 </html>
+
+

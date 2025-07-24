@@ -1,0 +1,45 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full p-2">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        File Name
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Date of File
+      </th>
+      <th scope="col" class="px-6 py-3">
+        View
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Edit
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Delete
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @homes.each do |home| %>
+    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= home.name %>
+      </th>
+      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= home.date.strftime('%b %d %Y') %>
+      </td>
+      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= link_to 'VIEW', home_path(home), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-gray-900 ' %>
+      </td>
+      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= link_to 'EDIT', edit_home_path(home), class: 'bg-[#3F8CFF] hover:bg-[#3A81EB] p-2 rounded font-bold rounded-md text-gray-900 ' %>
+      </td>
+      <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <%= link_to 'delete', home, method: :delete, data: { 'turbo_method': :delete, 'turbo-confirm': 'Are you sure?' }, class: "border border-b-4 border-r-4 border-red-900 p-2 rounded-md uppercase text-red-900 font-bold" %>
+
+      </td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
